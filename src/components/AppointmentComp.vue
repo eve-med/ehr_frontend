@@ -12,12 +12,39 @@
         <p className="justify-self-center">{{ appointment.admitted_by }}</p>
         <p>{{ appointment.specialty }}</p>
         <p>{{ time_passed[`${appointment.id}`] }}</p>
+        <div className="flex flex-col space-y-1">
+          <div className="flex space-x-4">
+            <div v-if="attended[appointment.id]" className="flex space-x-4">
+              <button v-on:click="attendPatient(appointment.id)" className="w-16 h-8 bg-[#EDB8B8] rounded-md text-center flex items-center justify-center">
+                <font-awesome-icon icon="fa-solid fa-xmark" color="#EA495C" />
+              </button>
+              <button className="w-16 h-8 bg-[#D8EEEB] rounded-md text-center flex items-center justify-center">
+                <font-awesome-icon icon="fa-solid fa-check" color="#76C3B5" />
+              </button>
+            </div>
+            <button
+              v-else
+              v-on:click="attendPatient(appointment.id)"
+              className="w-36 h-8 bg-[#EAE8FF] rounded-md text-center font-semibold text-[#647AD1] flex items-center justify-center "
+            >
+              Atender
+            </button>
+          </div>
+          <div className="flex space-x-4">
+            <button className="w-16 h-8 bg-[#E8F9FF] rounded-md text-center flex items-center justify-center">
+              <font-awesome-icon icon="fa-solid fa-clipboard-list" color="#649DD1" />
+            </button>
+            <button className="w-16 h-8 bg-[#EEE5D8] rounded-md text-center flex items-center justify-center">
+              <font-awesome-icon icon="fa-solid fa-layer-group" color="#C3A476" />
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import { defineComponent } from 'vue'
 import axios from 'axios'
 
@@ -35,8 +62,9 @@ export default defineComponent({
   data() {
     return {
       appointments: [],
-      time_passed: {},
-      color: {},
+      time_passed: { string: String },
+      color: { string: String },
+      attended: { string: Boolean },
     }
   },
 
@@ -59,10 +87,16 @@ export default defineComponent({
   },
 
   methods: {
+    attendPatient(appointment_id) {
+      console.log(this.attended[appointment_id])
+      console.log(!this.attended[appointment_id])
+      this.attended[appointment_id] = !this.attended[appointment_id]
+    },
     getColor() {
-      this.appointments.forEach((appointment: any) => {
+      this.appointments.forEach((appointment) => {
+        const id = appointment.id
         if (appointment.severity === 5) {
-          this.color[appointment.id] = 'border-red-500'
+          this.color[id] = 'border-red-500'
         } else if (appointment.severity === 10) {
           this.color[appointment.id] = 'border-yellow-500'
         } else {
@@ -70,7 +104,7 @@ export default defineComponent({
         }
       })
     },
-    getAge(born: string) {
+    getAge(born) {
       const bornDate = new Date(born)
       const ageDifMs = Date.now() - bornDate.getTime()
       const ageDate = new Date(ageDifMs)
@@ -78,14 +112,16 @@ export default defineComponent({
     },
     timePassed() {
       setInterval(() => {
-        this.appointments.forEach((appointment: any) => {
+        this.appointments.forEach((appointment) => {
           const appointmentDate = new Date(appointment['create_date'])
           const timeDifMs = Date.now() - appointmentDate.getTime()
           const days = Math.floor(timeDifMs / this._days)
           const hours = Math.floor((timeDifMs % this._days) / this._hours)
           const minutes = Math.floor((timeDifMs % this._hours) / this._minutes)
           const seconds = Math.floor((timeDifMs % this._minutes) / this._seconds)
-          this.time_passed[appointment.id] = `${minutes}m ${seconds}s`
+          const id = appointment.id
+          const time = `${minutes}m ${seconds}s`
+          this.time_passed[id] = time
         })
       }, 1000)
     },

@@ -1,21 +1,29 @@
 <template>
   <div className="flex w-screen px-10 pt-10 flex-col">
-    <div className="flex h-28 w-full mb-3 border-b-2 flex-col justify-between">
+    <div className="flex  w-full mb-10 flex-col justify-between">
       <div className="flex h-10 w-full justify-between items-center ">
-        <div className="font-bold text-2xl">Pacientes</div>
+        <div className="font-semibold text-2xl">Pacientes</div>
         <div className="w-96 flex justify-between">
           <div className="w-20 h-14 flex items-center justify-between">
-            <div className="w-8 h-8 flex items-center justify-center">
-              <font-awesome-icon icon="fa-solid fa-grip" />
-            </div>
-            <div className="w-0.5 h-8 bg-gray-100"></div>
-            <div className="w-8 h-8 flex items-center justify-center">
+            <button
+              v-on:click="changeView('list')"
+              className="w-8 h-8 flex items-center justify-center rounded-full"
+              :style="{ 'background-color': view === 'list' ? '#DDD' : '' }"
+            >
               <font-awesome-icon icon="fa-solid fa-list" />
-            </div>
+            </button>
+
+            <button
+              v-on:click="changeView('card')"
+              className="w-8 h-8 flex items-center justify-center rounded-full"
+              :style="{ 'background-color': view === 'card' ? '#DDD' : '' }"
+            >
+              <font-awesome-icon icon="fa-solid fa-grip" />
+            </button>
           </div>
           <div className="w-72">
             <form>
-              <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+              <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only">Search</label>
               <div class="relative">
                 <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                   <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -40,34 +48,16 @@
           </div>
         </div>
       </div>
-      <div className="flex">
-        <div className="pr-10">Urg.</div>
-        <div className="grid grid-cols-8 grid-rows-1 w-full">
-          <p>DNI</p>
-          <p>Nombre</p>
-          <p className="justify-self-center">Edad</p>
-          <p>Diagnostico</p>
-          <p className="justify-self-center">Ingreso</p>
-          <p>Especialidad</p>
-          <p>Esperando</p>
-        </div>
-      </div>
     </div>
-    <Suspense>
-      <template #default>
-        <AppointmentComp />
-      </template>
-      <template #fallback>
-        <AppointmentCompSkeleton />
-      </template>
-    </Suspense>
+    <AppointmentsListView v-if="view === 'list'" />
+    <AppointmentsCardView v-else />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import AppointmentComp from '@/components/AppointmentComp.vue'
-import AppointmentCompSkeleton from '@/components/AppointmentCompSkeleton.vue'
+import AppointmentsListView from '@/components/AppointmentsListView.vue'
+import AppointmentsCardView from '@/components/AppointmentsCardView.vue'
 
 export default defineComponent({
   name: 'HomeView',
@@ -75,13 +65,17 @@ export default defineComponent({
     return {
       appointments: Object,
       now: Date.now(),
+      view: 'list',
     }
   },
   components: {
-    AppointmentComp,
-    AppointmentCompSkeleton,
+    AppointmentsListView,
+    AppointmentsCardView,
   },
-
-  methods: {},
+  methods: {
+    changeView(newView: string) {
+      this.view = newView
+    },
+  },
 })
 </script>

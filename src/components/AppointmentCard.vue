@@ -1,40 +1,66 @@
 <template>
-  <div v-for="appointment in appointments">
+  <div v-for="appointment in chunkedAppointments" className="grid grid-cols-4 grid-flow-col gap-4 my-8">
     <div
-      className="h-20 w-full mb-3 rounded-lg border-l-[10px] flex items-center bg-[#F4F4F8]"
-      :style="{ 'border-left': appointment.severity === 5 ? '0.75rem solid #FA2' : '0.75rem solid #E45' }"
+      v-for="data in appointment"
+      class="w-72 max-w-sm h-72 bg-[#F8F8FE] border-l-8 rounded-lg flex items-center p-5"
+      :style="{ 'border-left': data.severity === 5 ? '0.5rem solid #FA2' : '0.5rem solid #E45' }"
     >
-      <div className="pl-16 grid grid-cols-8 grid-rows-1 w-full items-center">
-        <p>{{ appointment.patient.dni }}</p>
-        <p>{{ appointment.patient.name }}</p>
-        <p className="justify-self-center">{{ getAge(appointment.patient.born) }}</p>
-        <p>{{ appointment.diagnosis }}</p>
-        <p className="justify-self-center">{{ appointment.admitted_by }}</p>
-        <p>{{ appointment.specialty }}</p>
-        <p>{{ time_passed[`${appointment.id}`] }}</p>
+      <div className="grid grid-cols-2 grid-rows-3 gap-4">
+        <div className="font-medium">
+          {{ shortName(data.patient.name) }}
+          <br />
+          {{ data.patient.surname }}
+        </div>
+        <div className="text-right flex flex-col">
+          <div className="flex items-center justify-between">
+            <p className="text-xs text-light text-gray-400">DNI:</p>
+            <p>
+              {{ data.patient.dni }}
+            </p>
+          </div>
+          <div className="flex items-center justify-between">
+            <p className="text-xs text-light text-gray-400">Edad:</p>
+            <p>
+              {{ getAge(data.patient.born) }}
+            </p>
+          </div>
+        </div>
+        <div className="font-bold">{{ data.diagnosis }}</div>
+        <div className="text-right flex flex-col">
+          <p className="text-xs text-light text-gray-400">Espera:</p>
+          <p>{{ time_passed[`${data.id}`] }}</p>
+        </div>
+        <div className="flex flex-col justify-evenly">
+          <div>
+            {{ data.admitted_by }}
+          </div>
+          <div>
+            {{ data.specialty }}
+          </div>
+        </div>
         <div className="flex flex-col space-y-1">
-          <div className="flex space-x-4">
-            <div v-if="attended[appointment.id]" className="flex space-x-4">
-              <button v-on:click="attendPatient(appointment.id)" className="w-16 h-8 bg-[#EDB8B8] rounded-md text-center flex items-center justify-center">
+          <div className="flex">
+            <div v-if="attended[data.id]" className="flex space-x-1">
+              <button v-on:click="attendPatient(data.id)" className="w-14 h-8 bg-[#EDB8B8] rounded-md text-center flex items-center justify-center">
                 <font-awesome-icon icon="fa-solid fa-xmark" color="#EA495C" />
               </button>
-              <button className="w-16 h-8 bg-[#D8EEEB] rounded-md text-center flex items-center justify-center">
+              <button className="w-14 h-8 bg-[#D8EEEB] rounded-md text-center flex items-center justify-center">
                 <font-awesome-icon icon="fa-solid fa-check" color="#76C3B5" />
               </button>
             </div>
             <button
               v-else
-              v-on:click="attendPatient(appointment.id)"
+              v-on:click="attendPatient(data.id)"
               className="w-36 h-8 bg-[#EAE8FF] rounded-md text-center font-semibold text-[#647AD1] flex items-center justify-center "
             >
               Atender
             </button>
           </div>
-          <div className="flex space-x-4">
-            <button className="w-16 h-8 bg-[#E8F9FF] rounded-md text-center flex items-center justify-center">
+          <div className="flex space-x-1">
+            <button className="w-14 h-8 bg-[#E8F9FF] rounded-md text-center flex items-center justify-center">
               <font-awesome-icon icon="fa-solid fa-clipboard-list" color="#649DD1" />
             </button>
-            <button className="w-16 h-8 bg-[#EEE5D8] rounded-md text-center flex items-center justify-center">
+            <button className="w-14 h-8 bg-[#EEE5D8] rounded-md text-center flex items-center justify-center">
               <font-awesome-icon icon="fa-solid fa-layer-group" color="#C3A476" />
             </button>
           </div>
@@ -54,7 +80,7 @@ const getAppointments = async () => {
 }
 
 export default defineComponent({
-  name: 'AppointmentComp',
+  name: 'AppointmentList',
   async setup() {
     const appointments = await getAppointments()
     return { appointments }
@@ -74,6 +100,9 @@ export default defineComponent({
   },
 
   computed: {
+    chunkedAppointments() {
+      return this.chunk(this.appointments, 3)
+    },
     _seconds: () => 1000,
     _minutes() {
       return this._seconds * 60
@@ -87,9 +116,20 @@ export default defineComponent({
   },
 
   methods: {
+    shortName(name) {
+      if (name.split(' ').length > 1) {
+        return name.split(' ')[0] + ' ' + name.split(' ')[1][0] + '.'
+      }
+      return name
+    },
+    chunk() {
+      const chunked = []
+      for (let i = 0; i < this.appointments.length; i += 4) {
+        chunked.push(this.appointments.slice(i, i + 4))
+      }
+      return chunked
+    },
     attendPatient(appointment_id) {
-      console.log(this.attended[appointment_id])
-      console.log(!this.attended[appointment_id])
       this.attended[appointment_id] = !this.attended[appointment_id]
     },
     getColor() {

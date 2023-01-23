@@ -125,6 +125,10 @@ export default defineComponent({
           const hours = Math.floor((timeDifMs % this._days) / this._hours)
           const minutes = Math.floor((timeDifMs % this._hours) / this._minutes)
           const seconds = Math.floor((timeDifMs % this._minutes) / this._seconds)
+          if (hours > 0) {
+            this.time_passed[appointment.id] = `${hours}h ${minutes}m`
+            return
+          }
           const id = appointment.id
           const time = `${minutes}m ${seconds}s`
           this.time_passed[id] = time

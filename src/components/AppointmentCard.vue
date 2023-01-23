@@ -8,7 +8,6 @@
       <div className="grid grid-cols-2 grid-rows-3 gap-4">
         <div className="font-medium">
           {{ shortName(data.patient.name) }}
-          <br />
           {{ data.patient.surname }}
         </div>
         <div className="text-right flex flex-col">
@@ -38,29 +37,25 @@
             {{ data.specialty }}
           </div>
         </div>
-        <div className="flex flex-col space-y-1">
-          <div className="flex">
-            <div v-if="attended[data.id]" className="flex space-x-1">
-              <button v-on:click="attendPatient(data.id)" className="w-14 h-8 bg-[#EDB8B8] rounded-md text-center flex items-center justify-center">
-                <font-awesome-icon icon="fa-solid fa-xmark" color="#EA495C" />
-              </button>
-              <button className="w-14 h-8 bg-[#D8EEEB] rounded-md text-center flex items-center justify-center">
-                <font-awesome-icon icon="fa-solid fa-check" color="#76C3B5" />
-              </button>
-            </div>
-            <button
-              v-else
-              v-on:click="attendPatient(data.id)"
-              className="w-36 h-8 bg-[#EAE8FF] rounded-md text-center font-semibold text-[#647AD1] flex items-center justify-center "
-            >
-              Atender
+        <div className="flex flex-col w-28 h-16 gap-1">
+          <div v-if="attended[data.id]" className="flex h-1/2 w-full gap-1">
+            <button v-on:click="attendPatient(data.id)" className="w-full h-full  bg-[#EDB8B8] rounded-md text-center flex items-center justify-center">
+              <font-awesome-icon icon="fa-solid fa-xmark" color="#EA495C" />
+            </button>
+            <button className="w-full h-full bg-[#D8EEEB] rounded-md text-center flex items-center justify-center">
+              <font-awesome-icon icon="fa-solid fa-check" color="#76C3B5" />
             </button>
           </div>
-          <div className="flex space-x-1">
-            <button className="w-14 h-8 bg-[#E8F9FF] rounded-md text-center flex items-center justify-center">
+          <div v-else className="h-1/2 w-full">
+            <button v-on:click="attendPatient(data.id)" className="w-full h-full flex bg-[#EAE8FF] rounded-lg items-center justify-center">
+              <p className="font-semibold text-[#647AD1]">Atender</p>
+            </button>
+          </div>
+          <div className="flex w-full h-1/2 gap-x-1">
+            <button className="bg-[#E8F9FF] w-1/2 h-full rounded-lg flex items-center justify-center">
               <font-awesome-icon icon="fa-solid fa-clipboard-list" color="#649DD1" />
             </button>
-            <button className="w-14 h-8 bg-[#EEE5D8] rounded-md text-center flex items-center justify-center">
+            <button className=" bg-[#EEE5D8] w-1/2 h-full rounded-lg flex items-center justify-center">
               <font-awesome-icon icon="fa-solid fa-layer-group" color="#C3A476" />
             </button>
           </div>
@@ -159,6 +154,10 @@ export default defineComponent({
           const hours = Math.floor((timeDifMs % this._days) / this._hours)
           const minutes = Math.floor((timeDifMs % this._hours) / this._minutes)
           const seconds = Math.floor((timeDifMs % this._minutes) / this._seconds)
+          if (hours > 0) {
+            this.time_passed[appointment.id] = `${hours}h ${minutes}m`
+            return
+          }
           const id = appointment.id
           const time = `${minutes}m ${seconds}s`
           this.time_passed[id] = time

@@ -6,7 +6,7 @@
       <font-awesome-icon v-if="isVisible" icon="fa-solid fa-chevron-up" />
       <font-awesome-icon v-else icon="fa-solid fa-chevron-down" />
     </div>
-    <div className="w-1/4 pt-5 border-2 flex flex-col items-center" v-if="isVisible">
+    <div className="w-1/4 pt-5 border-2 rounded-md flex flex-col items-center" v-if="isVisible">
       <form className="w-4/5">
         <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
         <div class="relative">
@@ -19,7 +19,7 @@
             v-model="strSearch"
             type="search"
             id="default-search"
-            class="block w-full p-4 pl-10 text-md text-gray-900 border border-gray-300 rounded-lg bg-gray-50 "
+            class="block w-full p-4 pl-10 text-md text-gray-900 border border-gray-300 rounded-lg bg-gray-50"
             placeholder="Buscar diagnosticos..."
             required
           />
@@ -27,7 +27,7 @@
       </form>
       <div class="w-4/5">
         <ul class="divide-y divide-gray-200 overflow-y-scroll max-h-80 mb-5">
-          <li v-on:click="selectItem(item)" v-for="item in diagnoses" className="flex w-full py-2 items-center">
+          <li v-on:click="selectItem(item), (isVisible = !isVisible)" v-for="item in diagnoses" className="flex w-full py-2 items-center hover:bg-gray-200 hover:cursor-pointer">
             <p class="text-md text-gray-900">{{ item }}</p>
           </li>
         </ul>

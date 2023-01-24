@@ -49,7 +49,7 @@
         </div>
       </div>
     </div>
-    <AppointmentsListView v-if="view === 'list'" />
+    <AppointmentsListView v-if="view === 'card'" />
     <AppointmentsCardView v-else />
   </div>
 </template>

@@ -5,6 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "domain": "cp CNAME dist/",
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {

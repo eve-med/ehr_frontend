@@ -49,6 +49,7 @@
         </div>
       </div>
     </div>
+
     <AppointmentsListView v-if="view === 'list'" />
     <AppointmentsCardView v-else />
   </div>

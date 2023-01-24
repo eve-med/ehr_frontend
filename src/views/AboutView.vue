@@ -57,7 +57,7 @@ export default defineComponent({
   },
   methods: {
     getResults() {
-      const url = 'http://localhost:8000/icd/search/?q='
+      const url = 'http://18.213.63.69:8000/icd/search/?q='
       axios.get(url + this.strSearch).then((response) => {
         if (response.data.length === 0) {
           return

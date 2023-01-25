@@ -68,9 +68,14 @@
 <script>
 import { defineComponent } from 'vue'
 import axios from 'axios'
+import { appoin } from '@/stores/index.js'
 
 const getAppointments = async () => {
+  if (appoin.appointments && appoin.appointments.length > 0) {
+    return appoin.appointments
+  }
   const response = await axios.get('patients/appointments/')
+  appoin.appointments = response.data
   return response.data
 }
 

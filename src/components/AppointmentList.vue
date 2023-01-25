@@ -49,7 +49,7 @@ import { defineComponent } from 'vue'
 import axios from 'axios'
 
 const getAppointments = async () => {
-  const response = await axios.get('http://18.213.63.69:8000/patients/appointments/')
+  const response = await axios.get('https://backend.evemed.ar/patients/appointments/')
   return response.data
 }
 

@@ -16,6 +16,7 @@
             </svg>
           </div>
           <input
+            autofocus
             v-model="strSearch"
             type="search"
             id="default-search"

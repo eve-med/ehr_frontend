@@ -57,7 +57,7 @@ export default defineComponent({
   },
   methods: {
     getResults() {
-      const url = 'https://backend.evemed.ar/icd/search/?q='
+      const url = 'icd/search/?q='
       axios.get(url + this.strSearch).then((response) => {
         if (response.data.length === 0) {
           return

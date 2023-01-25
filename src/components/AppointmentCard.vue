@@ -70,7 +70,7 @@ import { defineComponent } from 'vue'
 import axios from 'axios'
 
 const getAppointments = async () => {
-  const response = await axios.get('https://backend.evemed.ar/patients/appointments/')
+  const response = await axios.get('patients/appointments/')
   return response.data
 }
 

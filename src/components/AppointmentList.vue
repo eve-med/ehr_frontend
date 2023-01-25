@@ -18,9 +18,9 @@
               <button v-on:click="attendPatient(appointment.id)" className="w-16 h-8 bg-[#EDB8B8] rounded-md text-center flex items-center justify-center">
                 <font-awesome-icon icon="fa-solid fa-xmark" color="#EA495C" />
               </button>
-              <button className="w-16 h-8 bg-[#D8EEEB] rounded-md text-center flex items-center justify-center">
+              <router-link to="/about" className="w-16 h-8 bg-[#D8EEEB] rounded-md text-center flex items-center justify-center">
                 <font-awesome-icon icon="fa-solid fa-check" color="#76C3B5" />
-              </button>
+              </router-link>
             </div>
             <button
               v-else

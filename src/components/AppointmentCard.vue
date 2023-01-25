@@ -42,9 +42,9 @@
             <button v-on:click="attendPatient(data.id)" className="w-full h-full  bg-[#EDB8B8] rounded-md text-center flex items-center justify-center">
               <font-awesome-icon icon="fa-solid fa-xmark" color="#EA495C" />
             </button>
-            <button className="w-full h-full bg-[#D8EEEB] rounded-md text-center flex items-center justify-center">
+            <router-link to="/about" className="w-full h-full bg-[#D8EEEB] rounded-md text-center flex items-center justify-center">
               <font-awesome-icon icon="fa-solid fa-check" color="#76C3B5" />
-            </button>
+            </router-link>
           </div>
           <div v-else className="h-1/2 w-full">
             <button v-on:click="attendPatient(data.id)" className="w-full h-full flex bg-[#EAE8FF] rounded-lg items-center justify-center">
